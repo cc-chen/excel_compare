@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>Excel 对比报告</title>
+<style>
+ body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;margin:0;padding:20px 24px 40px;color:#222;background:#fff;}
+ h1{font-size:19px;margin:0 0 4px;}
+ h2{font-size:14px;margin:20px 0 8px;color:#333;}
+ .k{color:#888;font-size:12px;}
+ .box{background:#fafbfc;border:1px solid #e8eaee;border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13px;line-height:1.9;}
+ .chips span{display:inline-block;font-size:13px;padding:3px 12px;border-radius:14px;margin-right:8px;font-weight:600;}
+ .c-same{background:#eef1f5;color:#44515f;}
+ .c-mod{background:#fff2cc;color:#8a5a00;}
+ .c-add{background:#e2efda;color:#2e7d32;}
+ .c-del{background:#fce4e4;color:#c62828;}
+ .bar{display:flex;align-items:center;gap:8px;margin:14px 0 8px;flex-wrap:wrap;}
+ .bar button{border:1px solid #d7dbe2;background:#fff;border-radius:6px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:#333;font-family:inherit;}
+ .bar button.on{background:#2f6fdf;border-color:#2f6fdf;color:#fff;}
+ .bar .sp{flex:1;}
+ .bar .hint{font-size:12px;color:#2e7d32;min-width:180px;}
+ .wrap{display:inline-block;max-width:100%;overflow:auto;max-height:calc(100vh - 120px);border:1px solid #e3e6ec;border-radius:8px;}
+ table{border-collapse:separate;border-spacing:0;font-size:12.5px;white-space:nowrap;}
+ th,td{border-right:1px solid #edf0f4;border-bottom:1px solid #edf0f4;padding:5px 9px;text-align:left;}
+ thead{position:sticky;top:0;z-index:4;}
+ thead th{background:#f2f4f7;color:#555;font-weight:700;text-align:center;font-size:12px;line-height:1.5;}
+ thead tr:nth-child(2) th{background:#f7f9fb;font-weight:600;color:#8a94a6;font-size:11.5px;border-bottom:1px solid #dfe3ea;}
+ th.ab-a{color:#8a94a6;}
+ th.ab-b{color:#5b6b85;}
+ td{background:#fff;vertical-align:middle;}
+ td.hot{background:#fde2e1;color:#c00000;font-weight:700;}
+ tbody tr:hover td{background:#f5f9ff;}
+ tbody tr:hover td.hot{background:#fbd7d5;}
+ td.st{font-weight:700;text-align:center;}
+ td.st-mod{background:#fff2cc;color:#8a5a00;}
+ td.st-add{background:#e2efda;color:#2e7d32;}
+ td.st-del{background:#fce4e4;color:#c62828;}
+ td.key{font-weight:700;color:#2a3240;}
+ td.na{background:#f3f4f7;}
+ .fix0{position:sticky;left:0;z-index:2;width:52px;min-width:52px;}
+ .fix1{position:sticky;left:52px;z-index:2;}
+ thead .fix0,thead .fix1{z-index:6;}
+ td.fix1{background:#fbfcfd;}
+ tbody tr:hover td.fix1{background:#f5f9ff;}
+ .nada{padding:14px;color:#888;font-size:13px;}
+ legend{font-size:12px;color:#666;margin-top:10px;}
+ .lg{display:inline-block;padding:1px 8px;border-radius:3px;margin-right:10px;}
+</style></head><body>
+<h1>Excel 对比报告</h1>
+<div class="k">生成时间：2026-10-28 17:37:24</div>
+
+<div class="box">
+ <div><b>文件A（基准）：</b>D:/项目/罗氏/进度计划_V1.xlsx &nbsp;<span class="k">[进度]</span></div>
+ <div><b>文件B（对比）：</b>D:/项目/罗氏/进度计划_V2.xlsx &nbsp;<span class="k">[进度]</span></div>
+ <div><b>比对方式：</b>按关键字列「编号」（表头行=1）</div>
+</div>
+
+<div class="box chips">
+ <span class="c-same">相同 2</span>
+ <span class="c-mod">修改 4</span>
+ <span class="c-add">新增 1</span>
+ <span class="c-del">删除 1</span>
+ <span class="c-same">差异行合计 6</span>
+</div>
+
+<h2>结构 / 注意事项</h2>
+<ul><li>无</li></ul>
+
+<h2>差异明细（只列差异行，整行输出；红色为差异单元格）</h2>
+<div class="bar">
+ <button class="on" data-f="all" onclick="flt(this,'all')">全部 6</button>
+ <button data-f="changed" onclick="flt(this,'changed')">修改 4</button>
+ <button data-f="added" onclick="flt(this,'added')">新增 1</button>
+ <button data-f="removed" onclick="flt(this,'removed')">删除 1</button>
+ <span class="sp"></span>
+ <span id="hint" class="hint"></span>
+ <button onclick="copyTable()">复制表格（粘贴到 Excel）</button>
+</div>
+<div class="wrap"><table id="tbl"><thead><tr><th class='fix0 st' rowspan='2'>差异类型</th><th class='fix1' rowspan='2'>关键字</th><th colspan='2'>编号</th><th colspan='2'>名称</th><th colspan='2'>专业</th><th colspan='2'>计划开始</th><th colspan='2'>进度%</th><th colspan='2'>状态</th><th colspan='2'>预算(万)</th><th colspan='2'>备注</th></tr><tr><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th><th class='ab-a'>A 基准</th><th class='ab-b'>B 对比</th></tr></thead><tbody><tr data-st='changed'><td class='fix0 st st-mod'>修改</td><td class='fix1 key'>GC1009</td><td>GC1009</td><td>GC1009</td><td>主体结构</td><td>主体结构</td><td>土建</td><td>土建</td><td>2026-04-10</td><td>2026-04-10</td><td class='hot'>65</td><td class='hot'>72</td><td>进行中</td><td>进行中</td><td>3600</td><td>3600</td><td>正常</td><td>正常</td></tr><tr data-st='changed'><td class='fix0 st st-mod'>修改</td><td class='fix1 key'>GC1010</td><td>GC1010</td><td>GC1010</td><td>机电安装</td><td>机电安装</td><td>MEP</td><td>MEP</td><td class='hot'>2026-05-01</td><td class='hot'>2026-05-06</td><td class='hot'>40</td><td class='hot'>45</td><td>进行中</td><td>进行中</td><td class='hot'>2400</td><td class='hot'>2500</td><td class='hot'>管综待确认</td><td class='hot'>管综已确认</td></tr><tr data-st='changed'><td class='fix0 st st-mod'>修改</td><td class='fix1 key'>GC1011</td><td>GC1011</td><td>GC1011</td><td>幕墙工程</td><td>幕墙工程</td><td>Façade</td><td>Façade</td><td>2026-06-15</td><td>2026-06-15</td><td>20</td><td>20</td><td class='hot'>进行中</td><td class='hot'>暂停</td><td>1800</td><td>1800</td><td>样板未定</td><td>样板未定</td></tr><tr data-st='removed'><td class='fix0 st st-del'>删除</td><td class='fix1 key'>GC1012</td><td class='hot'>GC1012</td><td class='na'></td><td class='hot'>消防工程</td><td class='na'></td><td class='hot'>Fire</td><td class='na'></td><td class='hot'>2026-06-20</td><td class='na'></td><td class='hot'>15</td><td class='na'></td><td class='hot'>进行中</td><td class='na'></td><td class='hot'>900</td><td class='na'></td><td class='hot'>图审滞后</td><td class='na'></td></tr><tr data-st='changed'><td class='fix0 st st-mod'>修改</td><td class='fix1 key'>GC1013</td><td>GC1013</td><td>GC1013</td><td>精装修</td><td>精装修</td><td>Fit out</td><td>Fit out</td><td class='hot'>2026-07-01</td><td class='hot'>2026-07-05</td><td class='hot'>5</td><td class='hot'>8</td><td class='hot'>未开始</td><td class='hot'>进行中</td><td>2600</td><td>2600</td><td class='hot'>待移交</td><td class='hot'>已移交</td></tr><tr data-st='added'><td class='fix0 st st-add'>新增</td><td class='fix1 key'>GC1015</td><td class='na'></td><td class='hot'>GC1015</td><td class='na'></td><td class='hot'>电梯工程</td><td class='na'></td><td class='hot'>MEP</td><td class='na'></td><td class='hot'>2026-09-01</td><td class='na'></td><td class='hot'>0</td><td class='na'></td><td class='hot'>未开始</td><td class='na'></td><td class='hot'>480</td><td class='na'></td><td class='hot'>新签</td></tr></tbody></table></div>
+<legend>
+ <span class="lg" style="background:#fde2e1;color:#c00000;font-weight:700">差异单元格</span>
+ <span class="lg" style="background:#fff2cc;color:#8a5a00">修改</span>
+ <span class="lg" style="background:#e2efda;color:#2e7d32">仅 B 有</span>
+ <span class="lg" style="background:#fce4e4;color:#c62828">仅 A 有</span>
+ &nbsp;·&nbsp;浅灰格表示该侧没有这条记录；滚动时左侧「差异类型 / 关键字」固定；点上方按钮可只看某一类差异。
+</legend>
+<script>var HDR=[["差异类型", ""], ["关键字", ""], ["编号", "A 基准"], ["编号", "B 对比"], ["名称", "A 基准"], ["名称", "B 对比"], ["专业", "A 基准"], ["专业", "B 对比"], ["计划开始", "A 基准"], ["计划开始", "B 对比"], ["进度%", "A 基准"], ["进度%", "B 对比"], ["状态", "A 基准"], ["状态", "B 对比"], ["预算(万)", "A 基准"], ["预算(万)", "B 对比"], ["备注", "A 基准"], ["备注", "B 对比"]];</script>
+<script>
+function flt(btn, f){
+  document.querySelectorAll('.bar button[data-f]').forEach(function(b){b.classList.toggle('on', b===btn);});
+  document.querySelectorAll('#tbl tbody tr').forEach(function(tr){
+    tr.style.display = (f==='all' || tr.dataset.st===f) ? '' : 'none';
+  });
+}
+function flash(msg){
+  var h=document.getElementById('hint'); h.textContent=msg;
+  setTimeout(function(){h.textContent='';}, 2600);
+}
+function copyTable(){
+  var lines=[];
+  // 表头由报告生成时直接给出（字段名 + A/B 侧），避免解析 rowspan/colspan 出错
+  var head=(window.HDR||[]).map(function(p){
+    return p[1] ? (p[0] + '\uff08' + p[1] + '\uff09') : p[0];
+  });
+  if(head.length){ lines.push(head.join('\t')); }
+  document.querySelectorAll('#tbl tbody tr').forEach(function(tr){
+    if(tr.style.display==='none') return;
+    var cells=[];
+    tr.querySelectorAll('td').forEach(function(td){ cells.push((td.textContent||'').replace(/\r?\n/g,' ')); });
+    lines.push(cells.join('\t'));
+  });
+  var text=lines.join('\r\n');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      flash('已复制 '+lines.length+' 行，可直接粘贴到 Excel');
+    }, function(){ fallback(text); });
+  } else { fallback(text); }
+}
+function fallback(text){
+  var ta=document.createElement('textarea');
+  ta.value=text; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); flash('已复制，可直接粘贴到 Excel'); }
+  catch(e){ flash('复制失败，请手动选择表格复制'); }
+  document.body.removeChild(ta);
+}
+</script>
+</body></html>
